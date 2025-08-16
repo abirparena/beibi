@@ -6,10 +6,7 @@ import mother.util.*;
 import java.util.*;
 import java.io.*;
 
-/**
- * Console-based UI for the Crime Reporting System
- * Handless all user interactions
- */
+
 public class CrimeReportingSystem {
     private static Scanner scanner = new Scanner(System.in);
     private static User currentUser = null;
@@ -153,30 +150,29 @@ public class CrimeReportingSystem {
         System.out.print("Victim Age: ");
         String victimAge = scanner.nextLine();
 
+        System.out.println("Contact info(Email/ Phone number etc.): ");
+        String contactinfo = scanner.nextLine();
+
+
         System.out.print("Platform (Facebook/Twitter/etc): ");
         String platform = scanner.nextLine();
 
-        System.out.println("Incident Details (type 'END' on new line to finish):");
-        StringBuilder incidentDetails = new StringBuilder();
+        System.out.println("Incident Details (press Enter twice to finish):");
+        String incidentDetails = "";
         String line;
-        while (!(line = scanner.nextLine()).equals("END")) {
-            incidentDetails.append(line).append("\n");
+        while (!(line = scanner.nextLine()).isEmpty()) {
+            incidentDetails += line + ("\n");
         }
 
-        System.out.println("Evidence Details (type 'END' on new line to finish):");
-        StringBuilder evidence = new StringBuilder();
-        while (!(line = scanner.nextLine()).equals("END")) {
-            evidence.append(line).append("\n");
+        System.out.println("Evidence Details (press Enter twice to finish):");
+        String evidence = "";
+        String line1;
+        while (!(line1 = scanner.nextLine()).isEmpty()) {
+            evidence += line1 += ("\n");
         }
 
-        Case newCase = new Case(
-                currentUser.getUsername(),
-                currentUser.getNid(),
-                victimName,
-                victimAge,
-                platform,
-                incidentDetails.toString(),
-                evidence.toString()
+        Case newCase = new Case(currentUser.getUsername(), currentUser.getNid(), victimName,
+                victimAge, contactinfo, platform, incidentDetails.toString(), evidence.toString()
         );
 
         ArrayList<Case> cases = FileHandler.loadCases();
@@ -313,6 +309,7 @@ public class CrimeReportingSystem {
 
             System.out.println("\n1. Update Case Status");
             System.out.println("2. Back to Admin Menu");
+            System.out.println("3. View Case Details");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -355,6 +352,45 @@ public class CrimeReportingSystem {
             else if (choice == 2) {
                 return;
             }
+
+            else if (choice == 3){
+                System.out.print("Enter case number to view: ");
+                int caseNum = scanner.nextInt();
+                scanner.nextLine();
+
+                if (caseNum < 1 || caseNum > cases.size()) {
+                    System.out.println("Invalid case number!");
+                    continue;
+                }
+
+                Case selectedCase = cases.get(caseNum-1);
+                printCaseDetails(selectedCase); // Helper method
+            }
+            else if (choice == 2) {
+                // Existing status update code...
+            }
+            else if (choice == 3) {
+                return;
+            }
         }
     }
+
+    private static void printCaseDetails(Case caseObj) {
+        System.out.println("\n=== Case Details ===");
+        System.out.println("Case ID: " + caseObj.getCaseId());
+        System.out.println("Reporter: " + caseObj.getReporterName());
+        System.out.println("Victim: " + caseObj.getVictimName() + " (Age: " + caseObj.getVictimAge() + ")");
+        System.out.println("Conract info: " + caseObj.getContactinfo());
+        System.out.println("Platform: " + caseObj.getPlatform());
+        System.out.println("Status: " + caseObj.getStatus());
+        System.out.println("Submitted: " + caseObj.getSubmissionTime());
+        System.out.println("\n-- Incident Details --");
+        System.out.println(caseObj.getIncidentDetails());
+        System.out.println("\n-- Evidence --");
+        System.out.println(caseObj.getEvidence());
+        System.out.println("----------------------");
+        System.out.println("Press Enter to continue...");
+        scanner.nextLine();
+    }
 }
+

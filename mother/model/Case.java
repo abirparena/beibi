@@ -13,6 +13,7 @@ public class Case implements Serializable {
     private String reporterNid;
     private String victimName;
     private String victimAge;
+    private String contactinfo;
     private String platform;
     private String incidentDetails;
     private String evidence;
@@ -20,13 +21,14 @@ public class Case implements Serializable {
     private LocalDateTime submissionTime;
 
     public Case(String reporterName, String reporterNid, String victimName,
-                String victimAge, String platform, String incidentDetails,
+                String victimAge, String contactinfo, String platform, String incidentDetails,
                 String evidence) {
         this.caseId = "CASE-" + System.currentTimeMillis();
         this.reporterName = reporterName;
         this.reporterNid = reporterNid;
         this.victimName = victimName;
         this.victimAge = victimAge;
+        this.contactinfo = contactinfo;
         this.platform = platform;
         this.incidentDetails = incidentDetails;
         this.evidence = evidence;
@@ -35,14 +37,28 @@ public class Case implements Serializable {
     }
 
     // Getter methods (Encapsulation)
-    public String getCaseId() { return caseId; }
-    public String getReporterName() { return reporterName; }
-    public String getReporterNid() { return reporterNid; }
-    public String getVictimName() { return victimName; }
-    public String getVictimAge() { return victimAge; }
-    public String getPlatform() { return platform; }
-    public String getStatus() { return status; }
-    public LocalDateTime getSubmissionTime() { return submissionTime; }
+    public String getCaseId()
+    { return caseId; }
+    public String getReporterName()
+    { return reporterName; }
+    public String getReporterNid()
+    { return reporterNid; }
+    public String getVictimName()
+    { return victimName; }
+    public String getVictimAge()
+    { return victimAge; }
+    public String getContactinfo()
+    {return contactinfo;}
+    public String getPlatform()
+    { return platform; }
+    public String getStatus()
+    { return status; }
+    public LocalDateTime getSubmissionTime()
+    { return submissionTime; }
+    public String getEvidence()
+    {return evidence;}
+    public String getIncidentDetails()
+    {return incidentDetails;}
 
     // Setter for status
     public void setStatus(String status) { this.status = status; }
