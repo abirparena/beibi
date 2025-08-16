@@ -140,6 +140,7 @@ class GUIAdminPanel extends JFrame {
     private JButton updateButton;
     private JButton logoutButton;
     private JButton statsButton;
+    private JButton viewDetailsButton;
 
     public GUIAdminPanel() {
         setTitle("Admin Dashboard");
@@ -181,6 +182,9 @@ class GUIAdminPanel extends JFrame {
         statsButton = new JButton("View Statistics");
         statsButton.addActionListener(this::showStatistics);
 
+        viewDetailsButton = new JButton("View Case Details");
+        viewDetailsButton.addActionListener(this::showCaseDetails);
+
         logoutButton = new JButton("Logout");
         logoutButton.addActionListener(this::logoutAdmin);
 
@@ -188,6 +192,7 @@ class GUIAdminPanel extends JFrame {
         controlPanel.add(updateButton);
         controlPanel.add(refreshButton);
         controlPanel.add(statsButton);
+        controlPanel.add(viewDetailsButton);
         controlPanel.add(logoutButton);
 
         mainPanel.add(controlPanel, BorderLayout.SOUTH);
@@ -269,6 +274,72 @@ class GUIAdminPanel extends JFrame {
         }
     }
 
+    private void showCaseDetails(ActionEvent e) {
+        int selectedRow = casesTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a case to view details.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String caseId = casesTable.getValueAt(selectedRow, 0).toString();
+        ArrayList<Case> cases = FileHandler.loadCases();
+        Case selectedCase = null;
+
+        for (Case c : cases) {
+            if (c.getCaseId().equals(caseId)) {
+                selectedCase = c;
+                break;
+            }
+        }
+
+        if (selectedCase != null) {
+            JDialog detailsDialog = new JDialog(this, "Case Details", true);
+            detailsDialog.setSize(600, 500);
+            detailsDialog.setLayout(new BorderLayout());
+
+            JTextArea detailsArea = new JTextArea();
+            detailsArea.setEditable(false);
+            detailsArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+            // Format the case details
+            String details = String.format(
+                    "=== Case Details ===\n" +
+                            "Case ID: %s\n" +
+                            "Reporter: %s\n" +
+                            "Victim: %s (Age: %s)\n" +
+                            "Contact Info: %s\n" +
+                            "Platform: %s\n" +
+                            "Status: %s\n" +
+                            "Submitted: %s\n\n" +
+                            "-- Incident Details --\n%s\n\n" +
+                            "-- Evidence --\n%s",
+                    selectedCase.getCaseId(),
+                    selectedCase.getReporterName(),
+                    selectedCase.getVictimName(),
+                    selectedCase.getVictimAge(),
+                    selectedCase.getContactinfo(),
+                    selectedCase.getPlatform(),
+                    selectedCase.getStatus(),
+                    selectedCase.getSubmissionTime(),
+                    selectedCase.getIncidentDetails(),
+                    selectedCase.getEvidence()
+            );
+
+            detailsArea.setText(details);
+
+            JScrollPane scrollPane = new JScrollPane(detailsArea);
+            detailsDialog.add(scrollPane, BorderLayout.CENTER);
+
+            JButton closeButton = new JButton("Close");
+            closeButton.addActionListener(ev -> detailsDialog.dispose());
+            detailsDialog.add(closeButton, BorderLayout.SOUTH);
+
+            detailsDialog.setLocationRelativeTo(this);
+            detailsDialog.setVisible(true);
+        }
+    }
+
     private void logoutAdmin(ActionEvent e) {
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Are you sure you want to logout?", "Confirm Logout",
@@ -276,7 +347,7 @@ class GUIAdminPanel extends JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             dispose();
-            new GUILoginWindow().setVisible(true);
+            new MainMenuWindow().setVisible(true);
         }
     }
 }
@@ -336,7 +407,6 @@ class GUILoginWindow extends JFrame {
                 dispose();
             } else {
                 try {
-                    // Reuse existing validation from console version
                     if (username.isEmpty() || password.isEmpty()) {
                         throw new InvalidNIDException("Fields cannot be empty");
                     }
@@ -364,7 +434,6 @@ class GUIUserMenu extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Reuse existing FileHandler to load cases
         ArrayList<Case> cases = FileHandler.loadCases();
         DefaultListModel<String> caseListModel = new DefaultListModel<>();
 
@@ -390,16 +459,16 @@ class GUIUserMenu extends JFrame {
 }
 
 class GUIFileCaseWindow extends JFrame {
-    // Declare all UI components as fields
     private JTextField victimNameField;
     private JTextField victimAgeField;
+    private JTextField contactInfoField;
     private JComboBox<String> platformComboBox;
     private JTextArea incidentDetailsArea;
     private JTextArea evidenceArea;
 
     public GUIFileCaseWindow(String username, String nid) {
         setTitle("File New Case");
-        setSize(700, 500);
+        setSize(700, 600); // Increased height to accommodate new field
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -409,6 +478,7 @@ class GUIFileCaseWindow extends JFrame {
         // Initialize all components
         victimNameField = new JTextField(20);
         victimAgeField = new JTextField(5);
+        contactInfoField = new JTextField(20);
 
         String[] platforms = {"Facebook", "Twitter", "Instagram", "WhatsApp", "Other"};
         platformComboBox = new JComboBox<>(platforms);
@@ -441,12 +511,18 @@ class GUIFileCaseWindow extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
+        inputPanel.add(new JLabel("Contact Info:"), gbc);
+        gbc.gridx = 1;
+        inputPanel.add(contactInfoField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         inputPanel.add(new JLabel("Platform:"), gbc);
         gbc.gridx = 1;
         inputPanel.add(platformComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         inputPanel.add(new JLabel("Incident Details:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
@@ -454,7 +530,7 @@ class GUIFileCaseWindow extends JFrame {
         gbc.weightx = 0.0;
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         inputPanel.add(new JLabel("Evidence (optional):"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
@@ -475,6 +551,7 @@ class GUIFileCaseWindow extends JFrame {
         try {
             if (victimNameField.getText().trim().isEmpty() ||
                     victimAgeField.getText().trim().isEmpty() ||
+                    contactInfoField.getText().trim().isEmpty() ||
                     incidentDetailsArea.getText().trim().isEmpty()) {
 
                 JOptionPane.showMessageDialog(this,
@@ -483,18 +560,17 @@ class GUIFileCaseWindow extends JFrame {
                 return;
             }
 
-            // Reuse existing Case class
             Case newCase = new Case(
                     username,
                     nid,
                     victimNameField.getText().trim(),
                     victimAgeField.getText().trim(),
+                    contactInfoField.getText().trim(),
                     (String) platformComboBox.getSelectedItem(),
                     incidentDetailsArea.getText().trim(),
                     evidenceArea.getText().trim()
             );
 
-            // Reuse FileHandler from original code
             ArrayList<Case> cases = FileHandler.loadCases();
             cases.add(newCase);
             FileHandler.saveCases(cases);
