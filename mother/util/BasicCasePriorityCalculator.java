@@ -2,10 +2,7 @@ package mother.util;
 
 import mother.model.Case;
 
-/**
- * Implements ICasePriorityCalculator
- * Demonstrates INTERFACE USAGE
- */
+
 public class BasicCasePriorityCalculator implements ICasePriorityCalculator {
     @Override
     public double calculatePriority(Case caseObj) {

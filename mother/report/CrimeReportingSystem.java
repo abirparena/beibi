@@ -101,7 +101,7 @@ public class CrimeReportingSystem {
         String nid = scanner.nextLine();
 
         try {
-            if (nid.length() != 10 || !nid.matches("\\d+")) {
+            if (nid.length() != 10 ) {
                 throw new InvalidNIDException("NID must be 10 digits");
             }
 
