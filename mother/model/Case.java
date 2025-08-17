@@ -3,10 +3,7 @@ package mother.model;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
-/**
- * Case class to store crime report data
- * Demonstrates ENCAPSULATION
- */
+/
 public class Case implements Serializable {
     private String caseId;
     private String reporterName;

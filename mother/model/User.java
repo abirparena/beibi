@@ -2,10 +2,7 @@ package mother.model;
 
 import java.io.Serializable;
 
-/**
- * Abstract User class (Superclass for Reporter and Admin)
- * Demonstrates ENCAPSULATION (private fields with getters)
- */
+
 public abstract class User implements Serializable {
     private String username;
     private String nid;

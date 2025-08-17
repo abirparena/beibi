@@ -12,15 +12,7 @@ public class CrimeReportingSystem {
     private static User currentUser = null;
     private static ICasePriorityCalculator priorityCalculator = new BasicCasePriorityCalculator();
 
-    // Helper method to find a zone by name
-    private static CrimeZone findZone(ArrayList<CrimeZone> zones, String name) {
-        for (CrimeZone zone : zones) {
-            if (zone.getZoneName().equals(name)) {
-                return zone;
-            }
-        }
-        return null;
-    }
+
 
     public static void start() {
         showMainMenu();
@@ -85,7 +77,7 @@ public class CrimeReportingSystem {
 
     private static void showCrimeRates() {
         ArrayList<CrimeZone> zones = FileHandler.loadCrimeData();
-        System.out.println("\n--- Crime Rates by Zone ---");
+        System.out.println("\n--- Crime Rates by Zone in the last 30 days ---");
         for (CrimeZone zone : zones) {
             System.out.printf("%-20s: %d incidents%n",
                     zone.getZoneName(), zone.getCrimeCount());
@@ -326,15 +318,16 @@ public class CrimeReportingSystem {
     private static void manageCases() {
         ArrayList<Case> cases = FileHandler.loadCases();
 
+
         while (true) {
             System.out.println("\n=== Case Management ===");
-            System.out.println("ID\tStatus\t\tVictim");
-            System.out.println("--------------------------------");
+            System.out.println("\t\t\tID\t\tStatus\t\t\tVictim\tPriority");
+            System.out.println("--------------------------------------------------------");
 
             for (int i = 0; i < cases.size(); i++) {
                 Case c = cases.get(i);
-                System.out.printf("%d. %s\t%-12s\t%s\n",
-                        i+1, c.getCaseId(), c.getStatus(), c.getVictimName());
+                BasicCasePriorityCalculator b = new BasicCasePriorityCalculator();
+                System.out.printf("%d. %s\t%-12s\t%s\t%.1f\n", i+1, c.getCaseId(), c.getStatus(), c.getVictimName(), b.calculatePriority(c));
             }
 
             System.out.println("\n1. Update Case Status");

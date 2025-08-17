@@ -5,10 +5,7 @@ import mother.model.Case;
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- * Handles file operations (Binary I/O)
- * Demonstrates METHOD OVERLOADING
- */
+
 public class FileHandler {
     private static final String CASES_FILE = "cases.dat";
     private static final String CRIME_DATA_FILE = "crime_data.dat";

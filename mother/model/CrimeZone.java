@@ -2,9 +2,7 @@ package mother.model;
 
 import java.io.Serializable;
 
-/**
- * Stores crime statistics for a zone (replaces HashMap)
- */
+
 public class CrimeZone implements Serializable {
     private String zoneName;
     private int crimeCount;
@@ -15,8 +13,10 @@ public class CrimeZone implements Serializable {
     }
 
     // Getters
-    public String getZoneName() { return zoneName; }
-    public int getCrimeCount() { return crimeCount; }
+    public String getZoneName(){
+        return zoneName; }
+    public int getCrimeCount(){
+        return crimeCount; }
 
     // Setters
     public void setCrimeCount(int crimeCount) {
