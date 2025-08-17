@@ -40,6 +40,13 @@ public class CrimeReportingSystem {
 
                 switch (choice) {
                     case 1:
+                        try {
+                            Thread.sleep(870);
+                        }
+                        catch (Exception e){
+                            // catching the exception
+                            System.out.println(e);
+                        }
                         showCrimeRates();
                         break;
                     case 2:
@@ -49,9 +56,25 @@ public class CrimeReportingSystem {
                         adminLogin();
                         break;
                     case 4:
-                        System.out.println("Exiting system...");
+                        System.out.print("Exiting system");
+                        try {
+                            for (int i = 0; i < 5; i++) {
+
+                                // sleep the main thread for 1 sec
+                                // for every loop runs
+                                Thread.sleep(350);
+
+                                // printing the value of the variable
+                                System.out.print(".");
+                            }
+                        }
+                        catch (Exception e) {
+                            // catching the exception
+                            System.out.println(e);
+                        }
                         return;
                     default:
+
                         System.out.println("Invalid choice!");
                 }
             } catch (NumberFormatException e) {
@@ -103,6 +126,13 @@ public class CrimeReportingSystem {
 
             switch (choice) {
                 case 1:
+                    try {
+                        Thread.sleep(870);
+                    }
+                        catch (Exception e){
+                // catching the exception
+                System.out.println(e);
+            }
                     checkUserCases();
                     break;
                 case 2:

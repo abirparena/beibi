@@ -57,10 +57,10 @@ public class FileHandler {
         } catch (Exception e) {
             // Initialize default data
             ArrayList<CrimeZone> defaultZones = new ArrayList<>();
-            defaultZones.add(new CrimeZone("Downtown", 45));
-            defaultZones.add(new CrimeZone("Suburbs", 25));
-            defaultZones.add(new CrimeZone("University Area", 35));
-            defaultZones.add(new CrimeZone("Industrial Zone", 15));
+            defaultZones.add(new CrimeZone("Mohammadpur", 75));
+            defaultZones.add(new CrimeZone("Gulshan", 27));
+            defaultZones.add(new CrimeZone("Dhanmondi", 34));
+            defaultZones.add(new CrimeZone("Shonir Akhra", 67));
             return defaultZones;
         }
         return new ArrayList<>();
