@@ -32,13 +32,6 @@ public class CrimeReportingSystem {
 
                 switch (choice) {
                     case 1:
-                        try {
-                            Thread.sleep(870);
-                        }
-                        catch (Exception e){
-                            // catching the exception
-                            System.out.println(e);
-                        }
                         showCrimeRates();
                         break;
                     case 2:
